@@ -1,0 +1,47 @@
+.dashboard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dashboard-heading,
+.empty-state {
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgb(15 23 42 / 8%);
+}
+
+.dashboard-heading {
+  .eyebrow {
+    margin: 0 0 0.5rem;
+    color: #2563eb;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+    color: #475569;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  border: 1px dashed #94a3b8;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: #475569;
+  }
+}
