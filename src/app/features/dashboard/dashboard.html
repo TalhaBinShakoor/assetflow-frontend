@@ -5,8 +5,42 @@
     <p>View and manage your company assets.</p>
   </div>
 
-  <div class="empty-state">
-    <h3>Your assets will appear here</h3>
-    <p>Asset data will be added when we connect this page to the backend.</p>
-  </div>
+  @if (isLoading()) {
+    <div class="status-state">
+      <p>Loading assets...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="status-state error-state" role="alert">
+      <p>{{ errorMessage() }}</p>
+    </div>
+  } @else if (assets().length === 0) {
+    <div class="status-state empty-state">
+      <h3>No assets found</h3>
+      <p>Your assets will appear here after you add them.</p>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Status</th>
+            <th scope="col">Purchase date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (asset of assets(); track asset.id) {
+            <tr>
+              <td>{{ asset.name }}</td>
+              <td>{{ asset.category }}</td>
+              <td>{{ asset.status }}</td>
+              <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </section>
