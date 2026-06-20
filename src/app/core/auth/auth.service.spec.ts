@@ -1,6 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { TokenStorageService } from './token-storage.service';
 
 import { AuthService } from './auth.service';
 
@@ -8,9 +9,18 @@ describe('AuthService', () => {
   let service: AuthService;
   let httpTesting: HttpTestingController;
 
+  const tokenStorageMock = {
+    saveToken: vi.fn(),
+  };
+
   beforeEach(() => {
+    tokenStorageMock.saveToken.mockReset();
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: TokenStorageService,
+          useValue: tokenStorageMock,
+        },
         AuthService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -42,6 +52,7 @@ describe('AuthService', () => {
     expect(request.request.responseType).toBe('text');
 
     request.flush('mock-jwt-token');
+    expect(tokenStorageMock.saveToken).toHaveBeenCalledWith('mock-jwt-token');
   });
 
   it('should send registration credentials to the backend', () => {
