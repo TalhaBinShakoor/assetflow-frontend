@@ -1,0 +1,59 @@
+<section class="auth-page">
+  <div class="auth-card">
+    <p class="eyebrow">Create an account</p>
+    <h2>Register for AssetFlow</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="username" autocomplete="username" />
+
+        @if (
+          registerForm.controls.username.touched &&
+          registerForm.controls.username.hasError('required')
+        ) {
+          <p class="field-error">Username is required.</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+
+        @if (
+          registerForm.controls.password.touched &&
+          registerForm.controls.password.hasError('required')
+        ) {
+          <p class="field-error">Password is required.</p>
+        } @else if (
+          registerForm.controls.password.touched &&
+          registerForm.controls.password.hasError('minlength')
+        ) {
+          <p class="field-error">Password must be at least 6 characters.</p>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <p class="form-message error" role="alert">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="form-message success" role="status">{{ successMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Creating account...' : 'Create account' }}
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Already registered?
+      <a routerLink="/login">Log in</a>
+    </p>
+  </div>
+</section>
