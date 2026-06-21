@@ -21,6 +21,16 @@ export const routes: Routes = [
       import('./features/auth/register/register').then((component) => component.Register),
   },
   {
+    path: 'assets/new',
+    loadComponent: () =>
+      import('./features/assets/asset-form/asset-form').then((component) => component.AssetForm),
+  },
+  {
+    path: 'assets/:id/edit',
+    loadComponent: () =>
+      import('./features/assets/asset-form/asset-form').then((component) => component.AssetForm),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./features/not-found/not-found').then((component) => component.NotFound),

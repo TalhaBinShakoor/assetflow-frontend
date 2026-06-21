@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from '../../../environments/environment';
-import { Asset } from './asset.model';
+import { Asset, AssetRequest } from './asset.model';
 import { AssetService } from './asset.service';
 
 describe('AssetService', () => {
@@ -43,5 +43,82 @@ describe('AssetService', () => {
     expect(request.request.method).toBe('GET');
 
     request.flush(assets);
+  });
+
+  it('should create an asset', () => {
+    const assetRequest: AssetRequest = {
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    const createdAsset: Asset = {
+      id: 1,
+      ...assetRequest,
+    };
+
+    service.createAsset(assetRequest).subscribe((response) => {
+      expect(response).toEqual(createdAsset);
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/assets`);
+
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual(assetRequest);
+
+    request.flush(createdAsset, {
+      status: 201,
+      statusText: 'Created',
+    });
+  });
+
+  it('should update an existing asset', () => {
+    const assetId = 1;
+
+    const assetRequest: AssetRequest = {
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'In Repair',
+      purchaseDate: '2026-06-20',
+    };
+
+    const updatedAsset: Asset = {
+      id: assetId,
+      ...assetRequest,
+    };
+
+    service.updateAsset(assetId, assetRequest).subscribe((response) => {
+      expect(response).toEqual(updatedAsset);
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/assets/${assetId}`);
+
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual(assetRequest);
+
+    request.flush(updatedAsset);
+  });
+
+  it('should fetch an asset by ID', () => {
+    const assetId = 1;
+
+    const asset: Asset = {
+      id: assetId,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    service.getAsset(assetId).subscribe((response) => {
+      expect(response).toEqual(asset);
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/assets/${assetId}`);
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush(asset);
   });
 });

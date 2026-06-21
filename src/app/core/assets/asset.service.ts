@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Asset } from './asset.model';
+import { Asset, AssetRequest } from './asset.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,19 @@ export class AssetService {
   private readonly http = inject(HttpClient);
   private readonly assetsUrl = `${environment.apiUrl}/api/assets`;
 
+  createAsset(request: AssetRequest): Observable<Asset> {
+    return this.http.post<Asset>(this.assetsUrl, request);
+  }
+
   getAssets(): Observable<Asset[]> {
     return this.http.get<Asset[]>(this.assetsUrl);
+  }
+
+  updateAsset(id: number, request: AssetRequest): Observable<Asset> {
+    return this.http.put<Asset>(`${this.assetsUrl}/${id}`, request);
+  }
+
+  getAsset(id: number): Observable<Asset> {
+    return this.http.get<Asset>(`${this.assetsUrl}/${id}`);
   }
 }

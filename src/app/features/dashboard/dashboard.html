@@ -2,7 +2,8 @@
   <div class="dashboard-heading">
     <p class="eyebrow">Overview</p>
     <h2>Dashboard</h2>
-    <p>View and manage your company assets.</p>
+    <p class="dashboard-description">View and manage your company assets.</p>
+    <a class="primary-action" routerLink="/assets/new"> Add asset </a>
   </div>
 
   @if (isLoading()) {
@@ -27,6 +28,7 @@
             <th scope="col">Category</th>
             <th scope="col">Status</th>
             <th scope="col">Purchase date</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
 
@@ -37,6 +39,9 @@
               <td>{{ asset.category }}</td>
               <td>{{ asset.status }}</td>
               <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
+              <td>
+                <a class="edit-action" [routerLink]="['/assets', asset.id, 'edit']"> Edit </a>
+              </td>
             </tr>
           }
         </tbody>

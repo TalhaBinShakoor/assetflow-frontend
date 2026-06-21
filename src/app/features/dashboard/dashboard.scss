@@ -28,9 +28,29 @@
     font-size: 2rem;
   }
 
-  p:last-child {
+  .dashboard-description {
     margin-bottom: 0;
     color: #475569;
+  }
+
+  .primary-action {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.4rem;
+    color: #ffffff;
+    background-color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #1d4ed8;
+    }
+
+    &:focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+    }
   }
 }
 
@@ -67,7 +87,7 @@
 
 table {
   width: 100%;
-  min-width: 40rem;
+  min-width: 46rem;
   border-collapse: collapse;
 }
 
@@ -97,5 +117,20 @@ tbody {
 
   tr:last-child td {
     border-bottom: 0;
+  }
+}
+
+.edit-action {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
   }
 }

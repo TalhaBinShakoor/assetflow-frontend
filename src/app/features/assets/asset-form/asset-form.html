@@ -1,0 +1,65 @@
+<section class="asset-form-page">
+  <div class="asset-form-card">
+    <p class="eyebrow">
+      {{ isEditMode ? 'Update asset' : 'New asset' }}
+    </p>
+    <h2>{{ isEditMode ? 'Edit asset' : 'Create asset' }}</h2>
+
+    @if (isLoading()) {
+      <p class="status-state">Loading asset...</p>
+    } @else if (loadErrorMessage()) {
+      <p class="form-message error" role="alert">
+        {{ loadErrorMessage() }}
+      </p>
+    } @else {
+      <form [formGroup]="assetForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <label for="asset-name">Name</label>
+          <input id="asset-name" type="text" formControlName="name" />
+          @if (assetForm.controls.name.touched && assetForm.controls.name.invalid) {
+            <p class="field-error">Enter a name containing at least one non-space character.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="asset-category">Category</label>
+          <input id="asset-category" type="text" formControlName="category" />
+          @if (assetForm.controls.category.touched && assetForm.controls.category.invalid) {
+            <p class="field-error">Enter a category containing at least one non-space character.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="asset-status">Status</label>
+          <input id="asset-status" type="text" formControlName="status" />
+          @if (assetForm.controls.status.touched && assetForm.controls.status.invalid) {
+            <p class="field-error">Enter a status containing at least one non-space character.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="asset-purchase-date">Purchase date</label>
+          <input id="asset-purchase-date" type="date" formControlName="purchaseDate" />
+          @if (
+            assetForm.controls.purchaseDate.touched &&
+            assetForm.controls.purchaseDate.hasError('required')
+          ) {
+            <p class="field-error">Purchase date is required.</p>
+          }
+        </div>
+        @if (saveErrorMessage()) {
+          <p class="form-message error" role="alert">
+            {{ saveErrorMessage() }}
+          </p>
+        }
+        <button type="submit" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            {{ isEditMode ? 'Updating...' : 'Creating...' }}
+          } @else {
+            {{ isEditMode ? 'Update asset' : 'Create asset' }}
+          }
+        </button>
+      </form>
+    }
+  </div>
+</section>

@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-
+import { RouterLink } from '@angular/router';
 import { Asset } from '../../core/assets/asset.model';
 import { AssetService } from '../../core/assets/asset.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Dashboard } from './dashboard';
 import { of, throwError } from 'rxjs';
 import { AssetService } from '../../core/assets/asset.service';
+import { provideRouter } from '@angular/router';
 
 describe('Dashboard', () => {
   let component: Dashboard;
@@ -21,6 +22,7 @@ describe('Dashboard', () => {
           provide: AssetService,
           useValue: assetServiceMock,
         },
+        provideRouter([]),
       ],
       imports: [Dashboard],
     }).compileComponents();
@@ -68,5 +70,27 @@ describe('Dashboard', () => {
     expect(component.isLoading()).toBe(false);
     expect(component.errorMessage()).toBe('Unable to load assets. Please try again.');
     expect(alert.textContent).toContain('Unable to load assets. Please try again.');
+  });
+
+  it('should render create and edit asset links', () => {
+    component.assets.set([
+      {
+        id: 1,
+        name: 'MacBook Pro',
+        category: 'Laptop',
+        status: 'Active',
+        purchaseDate: '2026-06-20',
+      },
+    ]);
+    component.isLoading.set(false);
+
+    fixture.detectChanges();
+
+    const createLink = fixture.nativeElement.querySelector('.primary-action');
+
+    const editLink = fixture.nativeElement.querySelector('.edit-action');
+
+    expect(createLink.getAttribute('href')).toBe('/assets/new');
+    expect(editLink.getAttribute('href')).toBe('/assets/1/edit');
   });
 });
