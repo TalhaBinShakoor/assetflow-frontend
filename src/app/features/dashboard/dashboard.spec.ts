@@ -10,11 +10,14 @@ describe('Dashboard', () => {
 
   const assetServiceMock = {
     getAssets: vi.fn(),
+    deleteAsset: vi.fn(),
   };
 
   beforeEach(async () => {
     assetServiceMock.getAssets.mockReset();
+    assetServiceMock.deleteAsset.mockReset();
     assetServiceMock.getAssets.mockReturnValue(of([]));
+    assetServiceMock.deleteAsset.mockReturnValue(of(undefined));
 
     await TestBed.configureTestingModule({
       providers: [
@@ -30,6 +33,10 @@ describe('Dashboard', () => {
     fixture = TestBed.createComponent(Dashboard);
     component = fixture.componentInstance;
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
@@ -92,5 +99,70 @@ describe('Dashboard', () => {
 
     expect(createLink.getAttribute('href')).toBe('/assets/new');
     expect(editLink.getAttribute('href')).toBe('/assets/1/edit');
+  });
+
+  it('should not delete an asset when confirmation is cancelled', () => {
+    const asset = {
+      id: 1,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    component.assets.set([asset]);
+
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+    component.onDeleteAsset(asset);
+
+    expect(confirmSpy).toHaveBeenCalledWith('Delete "MacBook Pro"? This action cannot be undone.');
+    expect(assetServiceMock.deleteAsset).not.toHaveBeenCalled();
+    expect(component.assets()).toEqual([asset]);
+  });
+
+  it('should delete an asset after confirmation succeeds', () => {
+    const asset = {
+      id: 1,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    component.assets.set([asset]);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    component.onDeleteAsset(asset);
+
+    expect(assetServiceMock.deleteAsset).toHaveBeenCalledWith(1);
+    expect(component.assets()).toEqual([]);
+    expect(component.deletingAssetId()).toBeNull();
+  });
+
+  it('should display an error when deleting an asset fails', () => {
+    const asset = {
+      id: 1,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    assetServiceMock.deleteAsset.mockReturnValue(throwError(() => new Error('Network error')));
+    component.assets.set([asset]);
+    component.isLoading.set(false);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    component.onDeleteAsset(asset);
+    fixture.detectChanges();
+
+    const alert = fixture.nativeElement.querySelector('[role="alert"]');
+
+    expect(assetServiceMock.deleteAsset).toHaveBeenCalledWith(1);
+    expect(component.assets()).toEqual([asset]);
+    expect(component.deleteErrorMessage()).toBe('Unable to delete asset. Please try again.');
+    expect(component.deletingAssetId()).toBeNull();
+    expect(alert.textContent).toContain('Unable to delete asset. Please try again.');
   });
 });

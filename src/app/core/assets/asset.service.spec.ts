@@ -100,6 +100,23 @@ describe('AssetService', () => {
     request.flush(updatedAsset);
   });
 
+  it('should delete an existing asset', () => {
+    const assetId = 1;
+
+    service.deleteAsset(assetId).subscribe((response) => {
+      expect(response).toBeNull();
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/assets/${assetId}`);
+
+    expect(request.request.method).toBe('DELETE');
+
+    request.flush(null, {
+      status: 204,
+      statusText: 'No Content',
+    });
+  });
+
   it('should fetch an asset by ID', () => {
     const assetId = 1;
 

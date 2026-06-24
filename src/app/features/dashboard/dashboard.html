@@ -20,6 +20,11 @@
       <p>Your assets will appear here after you add them.</p>
     </div>
   } @else {
+    @if (deleteErrorMessage()) {
+      <div class="status-state error-state" role="alert">
+        <p>{{ deleteErrorMessage() }}</p>
+      </div>
+    }
     <div class="table-container">
       <table>
         <thead>
@@ -40,7 +45,17 @@
               <td>{{ asset.status }}</td>
               <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
               <td>
-                <a class="edit-action" [routerLink]="['/assets', asset.id, 'edit']"> Edit </a>
+                <div class="asset-actions">
+                  <a class="edit-action" [routerLink]="['/assets', asset.id, 'edit']"> Edit </a>
+                  <button
+                    class="delete-action"
+                    type="button"
+                    [disabled]="deletingAssetId() !== null"
+                    (click)="onDeleteAsset(asset)"
+                  >
+                    {{ deletingAssetId() === asset.id ? 'Deleting...' : 'Delete' }}
+                  </button>
+                </div>
               </td>
             </tr>
           }

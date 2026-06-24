@@ -24,6 +24,10 @@ export class AssetService {
     return this.http.put<Asset>(`${this.assetsUrl}/${id}`, request);
   }
 
+  deleteAsset(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.assetsUrl}/${id}`);
+  }
+
   getAsset(id: number): Observable<Asset> {
     return this.http.get<Asset>(`${this.assetsUrl}/${id}`);
   }
