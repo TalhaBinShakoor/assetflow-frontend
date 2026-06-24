@@ -21,4 +21,17 @@ describe('Header', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render the admin navigation link', () => {
+    fixture.detectChanges();
+
+    const links = Array.from(
+      fixture.nativeElement.querySelectorAll('nav a'),
+    ) as HTMLAnchorElement[];
+
+    const adminLink = links.find((link) => link.textContent?.trim() === 'Admin');
+
+    expect(adminLink).toBeTruthy();
+    expect(adminLink?.getAttribute('href')).toBe('/admin/assets');
+  });
 });

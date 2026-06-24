@@ -45,6 +45,28 @@ describe('AssetService', () => {
     request.flush(assets);
   });
 
+  it('should fetch all assets for an admin user', () => {
+    const assets: Asset[] = [
+      {
+        id: 1,
+        name: 'MacBook Pro',
+        category: 'Laptop',
+        status: 'Active',
+        purchaseDate: '2026-06-20',
+      },
+    ];
+
+    service.getAdminAssets().subscribe((response) => {
+      expect(response).toEqual(assets);
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/admin/assets`);
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush(assets);
+  });
+
   it('should create an asset', () => {
     const assetRequest: AssetRequest = {
       name: 'MacBook Pro',

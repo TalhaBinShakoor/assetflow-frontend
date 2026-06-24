@@ -11,6 +11,7 @@ import { Asset, AssetRequest } from './asset.model';
 export class AssetService {
   private readonly http = inject(HttpClient);
   private readonly assetsUrl = `${environment.apiUrl}/api/assets`;
+  private readonly adminAssetsUrl = `${environment.apiUrl}/api/admin/assets`;
 
   createAsset(request: AssetRequest): Observable<Asset> {
     return this.http.post<Asset>(this.assetsUrl, request);
@@ -18,6 +19,10 @@ export class AssetService {
 
   getAssets(): Observable<Asset[]> {
     return this.http.get<Asset[]>(this.assetsUrl);
+  }
+
+  getAdminAssets(): Observable<Asset[]> {
+    return this.http.get<Asset[]>(this.adminAssetsUrl);
   }
 
   updateAsset(id: number, request: AssetRequest): Observable<Asset> {

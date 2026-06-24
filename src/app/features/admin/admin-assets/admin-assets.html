@@ -1,0 +1,46 @@
+<section class="admin-assets">
+  <div class="admin-assets-heading">
+    <p class="eyebrow">Admin</p>
+    <h2>All assets</h2>
+    <p class="admin-assets-description">View every asset registered in AssetFlow.</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="status-state">
+      <p>Loading all assets...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="status-state error-state" role="alert">
+      <p>{{ errorMessage() }}</p>
+    </div>
+  } @else if (assets().length === 0) {
+    <div class="status-state empty-state">
+      <h3>No assets found</h3>
+      <p>Assets from all users will appear here after they are created.</p>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Status</th>
+            <th scope="col">Purchase date</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (asset of assets(); track asset.id) {
+            <tr>
+              <td>{{ asset.name }}</td>
+              <td>{{ asset.category }}</td>
+              <td>{{ asset.status }}</td>
+              <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

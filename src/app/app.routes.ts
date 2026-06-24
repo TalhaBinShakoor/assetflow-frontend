@@ -12,6 +12,13 @@ export const routes: Routes = [
       import('./features/dashboard/dashboard').then((component) => component.Dashboard),
   },
   {
+    path: 'admin/assets',
+    loadComponent: () =>
+      import('./features/admin/admin-assets/admin-assets').then(
+        (component) => component.AdminAssets,
+      ),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then((component) => component.Login),
   },
