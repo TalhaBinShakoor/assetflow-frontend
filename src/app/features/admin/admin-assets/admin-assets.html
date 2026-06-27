@@ -24,6 +24,7 @@
         <thead>
           <tr>
             <th scope="col">Name</th>
+            <th scope="col">Owner</th>
             <th scope="col">Category</th>
             <th scope="col">Status</th>
             <th scope="col">Purchase date</th>
@@ -34,6 +35,7 @@
           @for (asset of assets(); track asset.id) {
             <tr>
               <td>{{ asset.name }}</td>
+              <td>{{ asset.ownerUsername }}</td>
               <td>{{ asset.category }}</td>
               <td>{{ asset.status }}</td>
               <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>

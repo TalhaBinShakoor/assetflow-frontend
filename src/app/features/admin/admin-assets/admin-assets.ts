@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 
-import { Asset } from '../../../core/assets/asset.model';
+import { AdminAsset } from '../../../core/assets/asset.model';
 import { AssetService } from '../../../core/assets/asset.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AssetService } from '../../../core/assets/asset.service';
 export class AdminAssets implements OnInit {
   private readonly assetService = inject(AssetService);
 
-  readonly assets = signal<Asset[]>([]);
+  readonly assets = signal<AdminAsset[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
 

@@ -45,6 +45,7 @@ describe('AdminAssets', () => {
           category: 'Laptop',
           status: 'Active',
           purchaseDate: '2026-06-20',
+          ownerUsername: 'talha',
         },
       ]),
     );
@@ -57,6 +58,7 @@ describe('AdminAssets', () => {
     expect(component.isLoading()).toBe(false);
     expect(rows).toHaveLength(1);
     expect(rows[0].textContent).toContain('MacBook Pro');
+    expect(rows[0].textContent).toContain('talha');
     expect(rows[0].textContent).toContain('Laptop');
     expect(rows[0].textContent).toContain('Active');
     expect(rows[0].textContent).toContain('2026-06-20');

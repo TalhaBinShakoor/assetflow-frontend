@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Asset, AssetRequest } from './asset.model';
+import { AdminAsset, Asset, AssetRequest } from './asset.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,8 @@ export class AssetService {
     return this.http.get<Asset[]>(this.assetsUrl);
   }
 
-  getAdminAssets(): Observable<Asset[]> {
-    return this.http.get<Asset[]>(this.adminAssetsUrl);
+  getAdminAssets(): Observable<AdminAsset[]> {
+    return this.http.get<AdminAsset[]>(this.adminAssetsUrl);
   }
 
   updateAsset(id: number, request: AssetRequest): Observable<Asset> {

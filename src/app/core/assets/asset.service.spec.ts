@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from '../../../environments/environment';
-import { Asset, AssetRequest } from './asset.model';
+import { AdminAsset, Asset, AssetRequest } from './asset.model';
 import { AssetService } from './asset.service';
 
 describe('AssetService', () => {
@@ -46,13 +46,14 @@ describe('AssetService', () => {
   });
 
   it('should fetch all assets for an admin user', () => {
-    const assets: Asset[] = [
+    const assets: AdminAsset[] = [
       {
         id: 1,
         name: 'MacBook Pro',
         category: 'Laptop',
         status: 'Active',
         purchaseDate: '2026-06-20',
+        ownerUsername: 'talha',
       },
     ];
 
