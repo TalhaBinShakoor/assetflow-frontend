@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 import { provideRouter } from '@angular/router';
 
 import { AssetService } from '../../../core/assets/asset.service';
@@ -70,6 +70,16 @@ describe('AdminAssets', () => {
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
+  });
+
+  it('should display a polished loading state while admin assets are loading', () => {
+    assetServiceMock.getAdminAssets.mockReturnValue(NEVER);
+
+    fixture.detectChanges();
+
+    expect(component.isLoading()).toBe(true);
+    expect(fixture.nativeElement.textContent).toContain('Loading admin assets');
+    expect(fixture.nativeElement.textContent).toContain('Fetching asset records across all users.');
   });
 
   it('should render all admin assets when loading succeeds', () => {
@@ -159,7 +169,7 @@ describe('AdminAssets', () => {
 
     expect(fixture.nativeElement.textContent).toContain('No matching assets');
     expect(fixture.nativeElement.textContent).toContain(
-      'No assets match the current search and filters.',
+      'Try changing the search text, status, or category filter.',
     );
     expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(0);
   });
@@ -262,7 +272,7 @@ describe('AdminAssets', () => {
     fixture.detectChanges();
 
     expect(component.isLoading()).toBe(false);
-    expect(fixture.nativeElement.textContent).toContain('No assets found');
+    expect(fixture.nativeElement.textContent).toContain('No assets in the system yet');
     expect(fixture.nativeElement.textContent).toContain(
       'Assets from all users will appear here after they are created.',
     );
@@ -281,6 +291,10 @@ describe('AdminAssets', () => {
     );
     expect(alert.textContent).toContain(
       'Unable to load admin assets. Please check your access and try again.',
+    );
+    expect(alert.textContent).toContain('Admin assets could not be loaded');
+    expect(alert.textContent).toContain(
+      'This page requires an admin account with backend authorization.',
     );
   });
 });

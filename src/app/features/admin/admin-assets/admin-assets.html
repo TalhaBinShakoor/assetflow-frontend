@@ -6,16 +6,19 @@
   </div>
 
   @if (isLoading()) {
-    <div class="status-state">
-      <p>Loading all assets...</p>
+    <div class="status-state loading-state" aria-live="polite">
+      <h3>Loading admin assets</h3>
+      <p>Fetching asset records across all users.</p>
     </div>
   } @else if (errorMessage()) {
     <div class="status-state error-state" role="alert">
+      <h3>Admin assets could not be loaded</h3>
       <p>{{ errorMessage() }}</p>
+      <p class="state-help">This page requires an admin account with backend authorization.</p>
     </div>
   } @else if (assets().length === 0) {
     <div class="status-state empty-state">
-      <h3>No assets found</h3>
+      <h3>No assets in the system yet</h3>
       <p>Assets from all users will appear here after they are created.</p>
     </div>
   } @else {
@@ -91,7 +94,7 @@
     @if (filteredAssets().length === 0 && hasActiveFilters()) {
       <div class="status-state empty-state">
         <h3>No matching assets</h3>
-        <p>No assets match the current search and filters.</p>
+        <p>Try changing the search text, status, or category filter.</p>
       </div>
     } @else {
       <div class="table-container">

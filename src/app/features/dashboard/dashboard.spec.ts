@@ -43,6 +43,30 @@ describe('Dashboard', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should display a polished loading state while assets are loading', () => {
+    component.isLoading.set(true);
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Loading your assets');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Fetching the latest asset records from AssetFlow.',
+    );
+  });
+
+  it('should display an empty state with a link to create the first asset', () => {
+    fixture.detectChanges();
+
+    const emptyStateLink = fixture.nativeElement.querySelector('.state-action');
+
+    expect(component.isLoading()).toBe(false);
+    expect(fixture.nativeElement.textContent).toContain('No assets yet');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Start by adding your first laptop, monitor, tool, or company device.',
+    );
+    expect(emptyStateLink.getAttribute('href')).toBe('/assets/new');
+  });
+
   it('should render an asset row when assets are available', () => {
     component.assets.set([
       {
@@ -77,6 +101,10 @@ describe('Dashboard', () => {
     expect(component.isLoading()).toBe(false);
     expect(component.errorMessage()).toBe('Unable to load assets. Please try again.');
     expect(alert.textContent).toContain('Unable to load assets. Please try again.');
+    expect(alert.textContent).toContain('Assets could not be loaded');
+    expect(alert.textContent).toContain(
+      'Refresh the page or sign in again if your session expired.',
+    );
   });
 
   it('should render create and edit asset links', () => {

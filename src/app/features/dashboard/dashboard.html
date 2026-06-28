@@ -7,17 +7,21 @@
   </div>
 
   @if (isLoading()) {
-    <div class="status-state">
-      <p>Loading assets...</p>
+    <div class="status-state loading-state" aria-live="polite">
+      <h3>Loading your assets</h3>
+      <p>Fetching the latest asset records from AssetFlow.</p>
     </div>
   } @else if (errorMessage()) {
     <div class="status-state error-state" role="alert">
+      <h3>Assets could not be loaded</h3>
       <p>{{ errorMessage() }}</p>
+      <p class="state-help">Refresh the page or sign in again if your session expired.</p>
     </div>
   } @else if (assets().length === 0) {
     <div class="status-state empty-state">
-      <h3>No assets found</h3>
-      <p>Your assets will appear here after you add them.</p>
+      <h3>No assets yet</h3>
+      <p>Start by adding your first laptop, monitor, tool, or company device.</p>
+      <a class="state-action" routerLink="/assets/new">Add your first asset</a>
     </div>
   } @else {
     @if (deleteErrorMessage()) {

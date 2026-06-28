@@ -37,21 +37,34 @@
 }
 
 .status-state {
+  display: grid;
+  gap: 0.75rem;
   padding: 2rem;
   text-align: center;
 
+  h3,
   p {
     margin: 0;
+  }
+
+  h3 {
+    color: #0f172a;
+    font-size: 1.15rem;
+  }
+
+  p {
     color: #475569;
   }
 }
 
+.loading-state {
+  border: 1px solid #bfdbfe;
+  background-color: #eff6ff;
+}
+
 .empty-state {
   border: 1px dashed #94a3b8;
-
-  h3 {
-    margin-top: 0;
-  }
+  background-color: #f8fafc;
 }
 
 .error-state {
@@ -61,6 +74,10 @@
   p {
     color: #b91c1c;
   }
+}
+
+.state-help {
+  font-size: 0.9rem;
 }
 
 .summary-grid {
