@@ -24,50 +24,121 @@
         <p>{{ deleteErrorMessage() }}</p>
       </div>
     }
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Owner</th>
-            <th scope="col">Category</th>
-            <th scope="col">Status</th>
-            <th scope="col">Purchase date</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
+    <div class="summary-grid" aria-label="Admin asset summary">
+      <div class="summary-card">
+        <span>Total assets</span>
+        <strong>{{ totalAssetCount() }}</strong>
+      </div>
 
-        <tbody>
-          @for (asset of assets(); track asset.id) {
-            <tr>
-              <td>{{ asset.name }}</td>
-              <td>{{ asset.ownerUsername }}</td>
-              <td>{{ asset.category }}</td>
-              <td>{{ asset.status }}</td>
-              <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
-              <td>
-                <div class="asset-actions">
-                  <a
-                    class="edit-action"
-                    [routerLink]="['/assets', asset.id, 'edit']"
-                    [queryParams]="{ returnTo: '/admin/assets' }"
-                  >
-                    Edit
-                  </a>
-                  <button
-                    class="delete-action"
-                    type="button"
-                    [disabled]="deletingAssetId() !== null"
-                    (click)="onDeleteAdminAsset(asset)"
-                  >
-                    {{ deletingAssetId() === asset.id ? 'Deleting...' : 'Delete' }}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      <div class="summary-card">
+        <span>Visible results</span>
+        <strong>{{ visibleAssetCount() }}</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Active</span>
+        <strong>{{ activeAssetCount() }}</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>In repair</span>
+        <strong>{{ inRepairAssetCount() }}</strong>
+      </div>
     </div>
+    <div class="admin-controls">
+      <div class="control-field search-field">
+        <label for="admin-asset-search">Search assets</label>
+        <input
+          id="admin-asset-search"
+          type="search"
+          placeholder="Search by asset name or owner"
+          [value]="searchTerm()"
+          #searchInput
+          (input)="onSearchTermChange(searchInput.value)"
+        />
+      </div>
+
+      <div class="control-field">
+        <label for="admin-status-filter">Status</label>
+        <select
+          id="admin-status-filter"
+          [value]="selectedStatus()"
+          #statusFilter
+          (change)="onStatusFilterChange(statusFilter.value)"
+        >
+          <option value="">All statuses</option>
+          @for (status of statusOptions(); track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="control-field">
+        <label for="admin-category-filter">Category</label>
+        <select
+          id="admin-category-filter"
+          [value]="selectedCategory()"
+          #categoryFilter
+          (change)="onCategoryFilterChange(categoryFilter.value)"
+        >
+          <option value="">All categories</option>
+          @for (category of categoryOptions(); track category) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    @if (filteredAssets().length === 0 && hasActiveFilters()) {
+      <div class="status-state empty-state">
+        <h3>No matching assets</h3>
+        <p>No assets match the current search and filters.</p>
+      </div>
+    } @else {
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Category</th>
+              <th scope="col">Status</th>
+              <th scope="col">Purchase date</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (asset of filteredAssets(); track asset.id) {
+              <tr>
+                <td>{{ asset.name }}</td>
+                <td>{{ asset.ownerUsername }}</td>
+                <td>{{ asset.category }}</td>
+                <td>{{ asset.status }}</td>
+                <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
+                <td>
+                  <div class="asset-actions">
+                    <a
+                      class="edit-action"
+                      [routerLink]="['/assets', asset.id, 'edit']"
+                      [queryParams]="{ returnTo: '/admin/assets' }"
+                    >
+                      Edit
+                    </a>
+                    <button
+                      class="delete-action"
+                      type="button"
+                      [disabled]="deletingAssetId() !== null"
+                      (click)="onDeleteAdminAsset(asset)"
+                    >
+                      {{ deletingAssetId() === asset.id ? 'Deleting...' : 'Delete' }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   }
 </section>

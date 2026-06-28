@@ -14,6 +14,33 @@ describe('AdminAssets', () => {
     deleteAdminAsset: vi.fn(),
   };
 
+  const adminAssets = [
+    {
+      id: 1,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+      ownerUsername: 'talha',
+    },
+    {
+      id: 2,
+      name: 'Office Chair',
+      category: 'Furniture',
+      status: 'In Repair',
+      purchaseDate: '2026-06-21',
+      ownerUsername: 'sara',
+    },
+    {
+      id: 3,
+      name: 'Dell Monitor',
+      category: 'Monitor',
+      status: 'Active',
+      purchaseDate: null,
+      ownerUsername: 'sara',
+    },
+  ];
+
   beforeEach(async () => {
     assetServiceMock.getAdminAssets.mockReset();
     assetServiceMock.deleteAdminAsset.mockReset();
@@ -71,6 +98,70 @@ describe('AdminAssets', () => {
     expect(rows[0].textContent).toContain('Laptop');
     expect(rows[0].textContent).toContain('Active');
     expect(rows[0].textContent).toContain('2026-06-20');
+  });
+
+  it('should render admin asset summary counts', () => {
+    assetServiceMock.getAdminAssets.mockReturnValue(of(adminAssets));
+
+    fixture.detectChanges();
+
+    const summaryText = fixture.nativeElement.querySelector('.summary-grid').textContent;
+
+    expect(summaryText).toContain('Total assets');
+    expect(summaryText).toContain('3');
+    expect(summaryText).toContain('Visible results');
+    expect(summaryText).toContain('3');
+    expect(summaryText).toContain('Active');
+    expect(summaryText).toContain('2');
+    expect(summaryText).toContain('In repair');
+    expect(summaryText).toContain('1');
+  });
+
+  it('should filter admin assets by asset name or owner', () => {
+    assetServiceMock.getAdminAssets.mockReturnValue(of(adminAssets));
+
+    fixture.detectChanges();
+
+    component.onSearchTermChange('sara');
+    fixture.detectChanges();
+
+    const rows = fixture.nativeElement.querySelectorAll('tbody tr');
+
+    expect(rows).toHaveLength(2);
+    expect(fixture.nativeElement.textContent).toContain('Office Chair');
+    expect(fixture.nativeElement.textContent).toContain('Dell Monitor');
+    expect(fixture.nativeElement.textContent).not.toContain('MacBook Pro');
+  });
+
+  it('should filter admin assets by status and category', () => {
+    assetServiceMock.getAdminAssets.mockReturnValue(of(adminAssets));
+
+    fixture.detectChanges();
+
+    component.onStatusFilterChange('Active');
+    component.onCategoryFilterChange('Monitor');
+    fixture.detectChanges();
+
+    const rows = fixture.nativeElement.querySelectorAll('tbody tr');
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0].textContent).toContain('Dell Monitor');
+    expect(rows[0].textContent).toContain('sara');
+  });
+
+  it('should render no matching assets when active filters hide all rows', () => {
+    assetServiceMock.getAdminAssets.mockReturnValue(of(adminAssets));
+
+    fixture.detectChanges();
+
+    component.onSearchTermChange('missing asset');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('No matching assets');
+    expect(fixture.nativeElement.textContent).toContain(
+      'No assets match the current search and filters.',
+    );
+    expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(0);
   });
 
   it('should render admin edit and delete actions for each asset', () => {

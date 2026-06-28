@@ -5,6 +5,8 @@
 
 .admin-assets-heading,
 .status-state,
+.summary-card,
+.admin-controls,
 .table-container {
   background-color: #ffffff;
   border-radius: 0.75rem;
@@ -58,6 +60,71 @@
 
   p {
     color: #b91c1c;
+  }
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  padding: 1.25rem;
+
+  span {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: #0f172a;
+    font-size: 2rem;
+  }
+}
+
+.admin-controls {
+  display: grid;
+  grid-template-columns: minmax(14rem, 2fr) repeat(2, minmax(10rem, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.control-field {
+  display: grid;
+  gap: 0.5rem;
+
+  label {
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-height: 2.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0 0.85rem;
+    color: #1e293b;
+    background-color: #ffffff;
+    font: inherit;
+
+    &:focus {
+      border-color: #2563eb;
+      outline: 3px solid #bfdbfe;
+    }
+  }
+}
+
+@media (max-width: 48rem) {
+  .admin-controls {
+    grid-template-columns: 1fr;
   }
 }
 
