@@ -68,6 +68,23 @@ describe('AssetService', () => {
     request.flush(assets);
   });
 
+  it('should delete an asset from the admin view using the asset delete endpoint', () => {
+    const assetId = 1;
+
+    service.deleteAdminAsset(assetId).subscribe((response) => {
+      expect(response).toBeNull();
+    });
+
+    const request = httpTesting.expectOne(`${environment.apiUrl}/api/assets/${assetId}`);
+
+    expect(request.request.method).toBe('DELETE');
+
+    request.flush(null, {
+      status: 204,
+      statusText: 'No Content',
+    });
+  });
+
   it('should create an asset', () => {
     const assetRequest: AssetRequest = {
       name: 'MacBook Pro',

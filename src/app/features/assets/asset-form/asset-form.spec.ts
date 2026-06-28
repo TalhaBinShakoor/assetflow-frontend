@@ -149,4 +149,42 @@ describe('AssetForm', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
     expect(routedComponent.isSubmitting()).toBe(false);
   });
+
+  it('should return to the admin assets page after an admin edit', async () => {
+    const existingAsset: Asset = {
+      id: 1,
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'Active',
+      purchaseDate: '2026-06-20',
+    };
+
+    const updateRequest: AssetRequest = {
+      name: 'MacBook Pro',
+      category: 'Laptop',
+      status: 'In Repair',
+      purchaseDate: '2026-06-20',
+    };
+
+    const updatedAsset: Asset = {
+      id: existingAsset.id,
+      ...updateRequest,
+    };
+
+    assetServiceMock.getAsset.mockReturnValue(of(existingAsset));
+    assetServiceMock.updateAsset.mockReturnValue(of(updatedAsset));
+
+    const harness = await RouterTestingHarness.create();
+
+    const routedComponent = await harness.navigateByUrl(
+      '/assets/1/edit?returnTo=/admin/assets',
+      AssetForm,
+    );
+
+    routedComponent.assetForm.setValue(updateRequest);
+    routedComponent.onSubmit();
+
+    expect(assetServiceMock.updateAsset).toHaveBeenCalledWith(existingAsset.id, updateRequest);
+    expect(router.navigate).toHaveBeenCalledWith(['/admin/assets']);
+  });
 });

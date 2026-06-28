@@ -23,9 +23,11 @@ export class AssetForm implements OnInit {
   readonly saveErrorMessage = signal('');
 
   private readonly idParam = this.route.snapshot.paramMap.get('id');
+  private readonly requestedReturnTo = this.route.snapshot.queryParamMap.get('returnTo');
 
   readonly isEditMode = this.idParam !== null;
   readonly assetId = this.idParam === null ? null : Number(this.idParam);
+  readonly returnPath = this.requestedReturnTo === '/admin/assets' ? '/admin/assets' : '/dashboard';
 
   readonly assetForm = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.pattern(/\S/)]],
@@ -94,7 +96,7 @@ export class AssetForm implements OnInit {
 
     saveRequest.pipe(finalize(() => this.isSubmitting.set(false))).subscribe({
       next: () => {
-        void this.router.navigate(['/dashboard']);
+        void this.router.navigate([this.returnPath]);
       },
       error: () => {
         this.saveErrorMessage.set(

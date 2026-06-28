@@ -99,3 +99,49 @@ tbody {
     border-bottom: 0;
   }
 }
+
+.asset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.edit-action {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+  }
+}
+
+.delete-action {
+  padding: 0;
+  border: 0;
+  color: #b91c1c;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    color: #94a3b8;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #fecaca;
+    outline-offset: 2px;
+  }
+}

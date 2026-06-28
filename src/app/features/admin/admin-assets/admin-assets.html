@@ -19,6 +19,11 @@
       <p>Assets from all users will appear here after they are created.</p>
     </div>
   } @else {
+    @if (deleteErrorMessage()) {
+      <div class="status-state error-state" role="alert">
+        <p>{{ deleteErrorMessage() }}</p>
+      </div>
+    }
     <div class="table-container">
       <table>
         <thead>
@@ -28,6 +33,7 @@
             <th scope="col">Category</th>
             <th scope="col">Status</th>
             <th scope="col">Purchase date</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
 
@@ -39,6 +45,25 @@
               <td>{{ asset.category }}</td>
               <td>{{ asset.status }}</td>
               <td>{{ asset.purchaseDate ?? 'Not recorded' }}</td>
+              <td>
+                <div class="asset-actions">
+                  <a
+                    class="edit-action"
+                    [routerLink]="['/assets', asset.id, 'edit']"
+                    [queryParams]="{ returnTo: '/admin/assets' }"
+                  >
+                    Edit
+                  </a>
+                  <button
+                    class="delete-action"
+                    type="button"
+                    [disabled]="deletingAssetId() !== null"
+                    (click)="onDeleteAdminAsset(asset)"
+                  >
+                    {{ deletingAssetId() === asset.id ? 'Deleting...' : 'Delete' }}
+                  </button>
+                </div>
+              </td>
             </tr>
           }
         </tbody>

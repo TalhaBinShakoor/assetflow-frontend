@@ -25,6 +25,10 @@ export class AssetService {
     return this.http.get<AdminAsset[]>(this.adminAssetsUrl);
   }
 
+  deleteAdminAsset(id: number): Observable<void> {
+    return this.deleteAsset(id);
+  }
+
   updateAsset(id: number, request: AssetRequest): Observable<Asset> {
     return this.http.put<Asset>(`${this.assetsUrl}/${id}`, request);
   }
