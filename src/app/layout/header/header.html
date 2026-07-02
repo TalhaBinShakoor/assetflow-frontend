@@ -1,18 +1,34 @@
 <header class="app-header">
-  <a class="brand" routerLink="/dashboard">
+  <a class="brand" [routerLink]="isLoggedIn() ? '/dashboard' : '/login'">
     <h1>AssetFlow</h1>
   </a>
 
   <nav aria-label="Main navigation">
-    <a
-      routerLink="/dashboard"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      Dashboard
-    </a>
-    <a routerLink="/admin/assets" routerLinkActive="active">Admin</a>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
-    <a routerLink="/register" routerLinkActive="active">Register</a>
+    @if (isLoggedIn()) {
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Dashboard
+      </a>
+
+      @if (isAdmin()) {
+        <a routerLink="/admin/assets" routerLinkActive="active">Admin</a>
+      }
+    } @else {
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Register</a>
+    }
   </nav>
+
+  @if (currentUser(); as user) {
+    <div class="profile-summary">
+      <span>
+        Signed in as <strong>{{ user.username }}</strong>
+      </span>
+      <span class="role-badge">{{ user.role }}</span>
+      <button type="button" (click)="logout()">Logout</button>
+    </div>
+  }
 </header>

@@ -22,9 +22,15 @@ nav {
   display: flex;
   gap: 0.5rem;
 
-  a {
+  a,
+  button {
     padding: 0.6rem 0.9rem;
     border-radius: 0.4rem;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
     text-decoration: none;
 
     &:hover {
@@ -42,8 +48,48 @@ nav {
   }
 }
 
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+
+  button {
+    padding: 0.55rem 0.8rem;
+    border: 1px solid #475569;
+    border-radius: 0.4rem;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+    font: inherit;
+
+    &:hover {
+      background-color: #1e293b;
+    }
+
+    &:focus-visible {
+      outline: 3px solid #fbbf24;
+      outline-offset: 2px;
+    }
+  }
+}
+
+.role-badge {
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  color: #bfdbfe;
+  background-color: #1e3a8a;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
 @media (max-width: 480px) {
   .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .profile-summary {
     align-items: flex-start;
     flex-direction: column;
   }
